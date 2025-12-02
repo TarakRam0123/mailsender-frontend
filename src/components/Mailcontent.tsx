@@ -1,6 +1,7 @@
 import { Container, Box, TextField } from "@mui/material";
 import { useState } from "react";
 import MultiFileAttachment from "./MultiFileAttachment";
+import Navbar from "./Navbar";
 
 const Mailcontent = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -10,12 +11,14 @@ const Mailcontent = () => {
   return (
     <>
       <Container maxWidth="lg">
+        <Navbar />
         <Box
           sx={{
             width: "60%",
             display: "flex",
             flexDirection: "column",
             gap: 2,
+            marginTop: 2,
           }}
         >
           <TextField
