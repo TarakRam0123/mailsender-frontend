@@ -8,19 +8,18 @@ import {
   Button,
   Menu,
   MenuItem,
-  useMediaQuery,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MailIcon from "@mui/icons-material/Mail";
-import { useTheme } from "@mui/material/styles";
+
 import { useNavigate } from "react-router-dom";
+import useResponsive from "../hooks/useResponsive";
 
 const Navbar: React.FC = () => {
-  const theme = useTheme();
   const navigate = useNavigate();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const { isMobile } = useResponsive();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
