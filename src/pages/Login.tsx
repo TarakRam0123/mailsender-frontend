@@ -1,15 +1,28 @@
 import React, { useState } from "react";
 import { Box, Button, TextField, Typography, Paper, Link } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../redux/apiSlice";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [login] = useLoginMutation();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(email, password);
+
+    try {
+      const res = await login({ email, password }).unwrap();
+      console.log("login success", res.token);
+      console.log(res.status);
+      if (res.status) {
+        sessionStorage.setItem("token", res.token);
+        navigate("/home");
+      }
+    } catch (error) {
+      console.log("login failed ", error);
+    }
   };
 
   return (

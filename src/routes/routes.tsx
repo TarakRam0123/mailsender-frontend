@@ -5,6 +5,7 @@ import Register from "../pages/Register";
 import Welcome from "../components/Welcome";
 import ProtectedRoute from "./ProtectedRoute";
 import NotFound from "../pages/NotFound";
+import Landingpage from "../pages/Landingpage";
 
 export const router = createBrowserRouter([
   {
@@ -25,7 +26,12 @@ export const router = createBrowserRouter([
       },
       {
         element: <ProtectedRoute />,
-        children: [],
+        children: [
+          {
+            path: "home",
+            element: <Landingpage />,
+          },
+        ],
       },
       {
         path: "*",

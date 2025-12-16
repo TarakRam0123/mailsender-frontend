@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 const ProtectedRoute: React.FC = () => {
-  const isAuthenticated = !!localStorage.getItem("token"); // 👈 change as needed
+  const isAuthenticated = !!sessionStorage.getItem("token"); // 👈 change as needed
   const location = useLocation();
 
   if (!isAuthenticated) {

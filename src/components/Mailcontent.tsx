@@ -11,7 +11,7 @@ const Mailcontent = () => {
   return (
     <>
       <Container maxWidth="lg">
-        <Navbar />
+        {/* <Navbar /> */}
         <Box
           sx={{
             width: "60%",

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Button, TextField, Typography, Paper, Link } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useRegisterMutation } from "../redux/apiSlice";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -8,10 +9,19 @@ const Register: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [register] = useRegisterMutation();
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(name, email, password);
+    try {
+      const res = await register({ name, email, password }).unwrap();
+      console.log("register success", res);
+      if (res.status) {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log("register failed ", error);
+    }
   };
 
   return (
@@ -85,7 +95,7 @@ const Register: React.FC = () => {
           Already have an account?{" "}
           <Link
             sx={{ cursor: "pointer", color: "primary.main" }}
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/login")}
           >
             Login
           </Link>
