@@ -2,10 +2,13 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import Welcome from "../components/Welcome";
+import Welcome from "../pages/Welcome";
 import ProtectedRoute from "./ProtectedRoute";
 import NotFound from "../pages/NotFound";
+import Messages from "../pages/Messages";
 import Landingpage from "../pages/Landingpage";
+import Profile from "../pages/Profile";
+import Provider from "../pages/Provider";
 
 export const router = createBrowserRouter([
   {
@@ -29,7 +32,22 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "home",
-            element: <Landingpage />,
+            element: <Messages />,
+          },
+          {
+            path: "mail",
+            // element: <Landingpage />,
+            children: [
+              {
+                path: "provider",
+                element: <Provider />,
+              },
+            ],
+          },
+
+          {
+            path: "profile",
+            element: <Profile />,
           },
         ],
       },
