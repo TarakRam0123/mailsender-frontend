@@ -3,6 +3,8 @@ import App from "../App";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Welcome from "../components/Welcome";
+import ProtectedRoute from "./ProtectedRoute";
+import NotFound from "../pages/NotFound";
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +22,14 @@ export const router = createBrowserRouter([
       {
         path: "register", // "/register"
         element: <Register />,
+      },
+      {
+        element: <ProtectedRoute />,
+        children: [],
+      },
+      {
+        path: "*",
+        element: <NotFound />,
       },
     ],
   },
