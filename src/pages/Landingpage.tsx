@@ -1,12 +1,11 @@
-import Mailcontent from "../components/Mailcontent"
-
+import Mailcontent from "../components/Mailcontent";
 
 const Landingpage = () => {
   return (
     <div>
-      <Mailcontent/>
+      <Mailcontent />
     </div>
-  )
-}
+  );
+};
 
-export default Landingpage
+export default Landingpage;
