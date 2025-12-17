@@ -11,8 +11,15 @@ const Provider = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const token = sessionStorage.getItem("token");
+
     axios
-      .get(`${API}/me/google`, { withCredentials: true })
+      .get(`${API}/me/google`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      })
       .then((res) => setGoogleConnected(res.data.googleConnected))
       .catch(() => {});
   }, []);
