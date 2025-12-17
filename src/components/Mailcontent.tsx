@@ -14,7 +14,6 @@ const Mailcontent = () => {
         {/* <Navbar /> */}
         <Box
           sx={{
-            width: "60%",
             display: "flex",
             flexDirection: "column",
             gap: 2,
