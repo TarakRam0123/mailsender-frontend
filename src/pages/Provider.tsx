@@ -1,37 +1,38 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Card, CardContent, Typography, Button } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
+import { useCheckGoogleQuery } from "../redux/apiSlice";
 
-const API = import.meta.env.VITE_API_URL;
+const API = "http://localhost:5500";
 
 const Provider = () => {
-  const [googleConnected, setGoogleConnected] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = sessionStorage.getItem("token");
+  // 🔥 RTK Query call (cookie auto-sent)
+  const { data, isLoading, isError } = useCheckGoogleQuery();
 
-    axios
-      .get(`${API}/me/google`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      })
-      .then((res) => setGoogleConnected(res.data.googleConnected))
-      .catch(() => {});
-  }, []);
   useEffect(() => {
-    if (googleConnected) {
+    console.log(API);
+    if (data?.googleConnected) {
       navigate("/mail/sendmail");
     }
-  }, [googleConnected, navigate]);
+  }, [data, navigate]);
 
   const connectGoogle = () => {
+    // 🔥 Cookies are automatically sent in redirect
     window.location.href = `${API}/auth/google`;
   };
+
+  if (isLoading) {
+    return <Typography align="center">Checking Gmail connection...</Typography>;
+  }
+
+  if (isError) {
+    return (
+      <Typography align="center">Session expired. Please login.</Typography>
+    );
+  }
 
   return (
     <Box
@@ -66,8 +67,7 @@ const Provider = () => {
           </Typography>
 
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            Connect your Gmail account to send and manage emails directly from
-            MailSender.
+            Connect your Gmail account to send emails directly from MailSender.
           </Typography>
 
           <Button

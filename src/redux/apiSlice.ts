@@ -1,20 +1,31 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
+const API = import.meta.env.VITE_API_URL
 export const apiSlice = createApi({
     reducerPath: "authapi",
-    baseQuery: fetchBaseQuery({ baseUrl: "http://192.168.0.67:5500/api" }),
+    baseQuery: fetchBaseQuery({ baseUrl: API, credentials: "include", }),
     tagTypes: [],
     endpoints: (e) => ({
         register: e.mutation({
-            query: (body) => ({ url: "auth/register", method: "POST", body })
+            query: (body) => ({ url: "api/auth/register", method: "POST", body })
         }),
         login: e.mutation({
-            query: (body) => ({ url: "auth/login", method: "POST", body })
-        })
+            query: (body) => ({ url: "api/auth/login", method: "POST", body })
+        }),
+        logout: e.mutation({
+            query: (body) => ({ url: "api/auth/logout", method: "POST", body })
+        }),
+        checkGoogle: e.query({
+            query: () => ({
+                url: "me/google",
+                method: "GET",
+            }),
+        }),
+
     })
 
 })
 
-export const { useRegisterMutation, useLoginMutation } = apiSlice
+export const { useRegisterMutation, useLoginMutation, useLogoutMutation, useCheckGoogleQuery } = apiSlice
 
 

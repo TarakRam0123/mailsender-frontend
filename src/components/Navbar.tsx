@@ -8,14 +8,21 @@ import HowToRegIcon from "@mui/icons-material/HowToReg";
 import MessagesIcon from "@mui/icons-material/Message";
 import { useNavigate } from "react-router-dom";
 import { IconButton, Tooltip } from "@mui/material";
+import { useLogoutMutation } from "../redux/apiSlice";
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
+  const [logout] = useLogoutMutation();
 
   const isLoggedIn = Boolean(sessionStorage.getItem("token"));
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("token");
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+      sessionStorage.removeItem("token");
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
