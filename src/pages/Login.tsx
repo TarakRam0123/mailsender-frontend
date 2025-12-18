@@ -18,6 +18,7 @@ const Login: React.FC = () => {
       console.log(res.status);
       if (res.status) {
         sessionStorage.setItem("token", res.token);
+
         navigate("/home");
       }
     } catch (error) {
