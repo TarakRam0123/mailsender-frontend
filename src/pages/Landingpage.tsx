@@ -1,4 +1,4 @@
-import { Box, Divider } from "@mui/material";
+import { Box } from "@mui/material";
 import Mailcontent from "../components/Mailcontent";
 import SendOptions from "../components/SendOptions";
 import Output from "../components/Output";
@@ -36,8 +36,6 @@ const Landingpage = () => {
         {/* SEND OPTIONS */}
 
         <SendOptions />
-
-        <Divider />
 
         {/* OUTPUT */}
         <Output />

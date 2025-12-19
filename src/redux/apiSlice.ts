@@ -29,7 +29,7 @@ export const apiSlice = createApi({
 
 })
 
-export const { useRegisterMutation, useLoginMutation, useLogoutMutation, useCheckGoogleQuery } = apiSlice
+export const { useRegisterMutation, useLoginMutation, useLogoutMutation, useCheckGoogleQuery ,useLazyGetUserQuery} = apiSlice
 
 
 
