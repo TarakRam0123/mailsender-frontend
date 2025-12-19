@@ -16,7 +16,7 @@ export const apiSlice = createApi({
             query: () => ({ url: "api/auth/logout", method: "POST" })
         }),
         getUser: e.query({
-            query: () => ({ url: "/api/auth/getUser", method: "GET" })
+            query: () => ({ url: "api/auth/getUser", method: "GET" })
         }),
         checkGoogle: e.query({
             query: () => ({
@@ -30,5 +30,9 @@ export const apiSlice = createApi({
 })
 
 export const { useRegisterMutation, useLoginMutation, useLogoutMutation, useCheckGoogleQuery } = apiSlice
+
+
+
+
 
 
