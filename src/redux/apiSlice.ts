@@ -4,19 +4,19 @@ const API = import.meta.env.VITE_API_URL
 export const apiSlice = createApi({
     reducerPath: "authapi",
     baseQuery: fetchBaseQuery({ baseUrl: API, credentials: "include", }),
-    tagTypes: [],
+    tagTypes: ["Auth"],
     endpoints: (e) => ({
         register: e.mutation({
-            query: (body) => ({ url: "api/auth/register", method: "POST", body })
+            query: (body) => ({ url: "api/auth/register", method: "POST", body }),
         }),
         login: e.mutation({
-            query: (body) => ({ url: "api/auth/login", method: "POST", body })
+            query: (body) => ({ url: "api/auth/login", method: "POST", body }), invalidatesTags: ["Auth"]
         }),
-        logout: e.mutation({
-            query: () => ({ url: "api/auth/logout", method: "POST" })
+        logout: e.mutation<{ status: boolean; message: string }, void>({
+            query: () => ({ url: "api/auth/logout", method: "POST" }), invalidatesTags: ["Auth"]
         }),
-        getUser: e.query({
-            query: () => ({ url: "api/auth/getUser", method: "GET" })
+        getUser: e.query<GetUserResponse, void>({
+            query: () => ({ url: "api/auth/getUser", method: "GET" }), providesTags: ["Auth"],
         }),
         checkGoogle: e.query({
             query: () => ({
@@ -28,8 +28,13 @@ export const apiSlice = createApi({
     })
 
 })
+export interface GetUserResponse {
+    status: boolean;
+    message: string;
+    userDetails: string;
+}
 
-export const { useRegisterMutation, useLoginMutation, useLogoutMutation, useCheckGoogleQuery ,useLazyGetUserQuery} = apiSlice
+export const { useRegisterMutation, useLoginMutation, useLogoutMutation, useCheckGoogleQuery, useGetUserQuery } = apiSlice
 
 
 

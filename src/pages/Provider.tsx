@@ -13,7 +13,6 @@ const Provider = () => {
   const { data, isLoading, isError } = useCheckGoogleQuery();
 
   useEffect(() => {
-    console.log(API);
     if (data?.googleConnected) {
       navigate("/mail/sendmail");
     }
