@@ -1,28 +1,59 @@
 import React, { useState } from "react";
-import { Box, Button, TextField, Typography, Paper, Link } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  Link,
+  IconButton,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../redux/apiSlice";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const [login] = useLoginMutation();
+
+  const handleClickShowPassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
+
+  const handleMouseUpPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       const res = await login({ email, password }).unwrap();
-      console.log("login success", res.token);
-      console.log(res.status);
+
       if (res.status) {
         sessionStorage.setItem("token", res.token);
-
         navigate("/home");
       }
     } catch (error) {
-      console.log("login failed ", error);
+      console.error("Login failed", error);
     }
   };
 
@@ -35,17 +66,17 @@ const Login: React.FC = () => {
       bgcolor="background.default"
     >
       <Paper
+        elevation={3}
         sx={{
           padding: 3,
           width: 350,
           backgroundColor: "background.paper",
         }}
-        elevation={3}
       >
         <Typography
           variant="h5"
           textAlign="center"
-          marginBottom={3}
+          mb={3}
           color="primary.main"
           fontWeight={600}
         >
@@ -53,6 +84,7 @@ const Login: React.FC = () => {
         </Typography>
 
         <form onSubmit={handleSubmit}>
+          {/* Email */}
           <TextField
             label="Email"
             fullWidth
@@ -60,16 +92,40 @@ const Login: React.FC = () => {
             sx={{ mb: 2 }}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
 
-          <TextField
-            label="Password"
-            fullWidth
-            type="password"
-            sx={{ mb: 3 }}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          {/* Password (OutlinedInput version) */}
+          <FormControl fullWidth variant="outlined" sx={{ mb: 3 }}>
+            <InputLabel htmlFor="outlined-adornment-password">
+              Password
+            </InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label={
+                      showPassword
+                        ? "hide the password"
+                        : "display the password"
+                    }
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    onMouseUp={handleMouseUpPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Password"
+              required
+            />
+          </FormControl>
 
           <Button
             variant="contained"
@@ -88,7 +144,8 @@ const Login: React.FC = () => {
         <Typography textAlign="center">
           Don’t have an account?{" "}
           <Link
-            sx={{ cursor: "pointer", color: "primary.main" }}
+            component="button"
+            sx={{ color: "primary.main" }}
             onClick={() => navigate("/register")}
           >
             Register
