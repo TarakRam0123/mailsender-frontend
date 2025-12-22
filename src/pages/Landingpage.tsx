@@ -2,25 +2,26 @@ import { Box } from "@mui/material";
 import Mailcontent from "../components/Mailcontent";
 import SendOptions from "../components/SendOptions";
 import Output from "../components/Output";
+import { useState } from "react";
 
 const Landingpage = () => {
+  const [files, setFiles] = useState<File[]>([]);
   return (
     <Box
       sx={{
-        height: "90vh",
+        height: "84vh",
         display: "flex",
-        bgcolor: "#fafafa",
       }}
     >
       {/* LEFT : MAIL CONTENT */}
       <Box
         sx={{
           flex: 3,
-          borderRight: "1px solid #e0e0e0",
+
           overflow: "hidden",
         }}
       >
-        <Mailcontent />
+        <Mailcontent files={files} setFiles={setFiles} />
       </Box>
 
       {/* RIGHT : ACTION + OUTPUT */}
@@ -31,11 +32,12 @@ const Landingpage = () => {
           flexDirection: "column",
           p: 2,
           gap: 2,
+          height: "580px",
         }}
       >
         {/* SEND OPTIONS */}
 
-        <SendOptions />
+        <SendOptions files={files} />
 
         {/* OUTPUT */}
         <Output />

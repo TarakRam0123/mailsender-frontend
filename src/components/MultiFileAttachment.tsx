@@ -1,10 +1,9 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import {
   Box,
   Button,
   Paper,
   IconButton,
-  Stack,
   Typography,
   Grid,
 } from "@mui/material";
@@ -13,125 +12,70 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import ImageIcon from "@mui/icons-material/Image";
 
-type FilePreview = {
-  id: string; // unique id for list rendering
-  file: File;
-  previewUrl?: string; // for images only
-};
-
-interface MultiFileAttachmentProps {
-  onChange?: (files: File[]) => void;
-  accept?: string; // default will accept images and pdf
-  maxFileSizeInBytes?: number; // optional single file size limit
-  maxFiles?: number; // optional total files limit
+interface Props {
+  files: File[];
+  onChange: (files: File[]) => void;
+  disabled?: boolean;
+  accept?: string;
+  maxFileSizeInBytes?: number;
+  maxFiles?: number;
 }
 
 const DEFAULT_ACCEPT = "image/*,application/pdf";
 
-const formatSize = (bytes: number) => {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
-};
-
-const truncate = (name: string, limit = 10) => {
-  const dotIndex = name.lastIndexOf(".");
-  if (dotIndex === -1) {
-    return name.length > limit ? name.slice(0, limit) + "..." : name;
-  }
-  const base = name.slice(0, dotIndex);
-  const ext = name.slice(dotIndex);
-  const truncatedBase =
-    base.length > limit ? base.slice(0, limit) + "..." : base;
-  return `${truncatedBase}${ext}`;
-};
-
-const MultiFileAttachment: React.FC<MultiFileAttachmentProps> = ({
+const MultiFileAttachment: React.FC<Props> = ({
+  files,
   onChange,
+  disabled = false,
   accept = DEFAULT_ACCEPT,
   maxFileSizeInBytes,
   maxFiles,
 }) => {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const [files, setFiles] = useState<FilePreview[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<string>("");
 
-  // clean up object URLs on unmount
-  useEffect(() => {
-    return () => {
-      files.forEach((f) => f.previewUrl && URL.revokeObjectURL(f.previewUrl));
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const formatSize = (bytes: number) =>
+    bytes < 1024
+      ? `${bytes} B`
+      : bytes < 1024 * 1024
+      ? `${(bytes / 1024).toFixed(1)} KB`
+      : `${(bytes / 1024 / 1024).toFixed(2)} MB`;
 
-  const handleFilesSelected = (selected: FileList | null) => {
-    setError(null);
-    if (!selected) return;
+  const handleFiles = (list: FileList | null) => {
+    if (!list) return;
 
-    const selectedArr = Array.from(selected);
+    const selected = Array.from(list);
 
-    // enforce maxFiles
-    if (maxFiles && files.length + selectedArr.length > maxFiles) {
-      setError(`You can attach a maximum of ${maxFiles} file(s).`);
-      return;
+    if (maxFiles && files.length + selected.length > maxFiles) {
+      return setError(`Max ${maxFiles} files allowed`);
     }
 
-    const newPreviews: FilePreview[] = [];
-    for (const file of selectedArr) {
-      // check type
-      const isImage = file.type.startsWith("image/");
-      const isPdf = file.type === "application/pdf";
-      if (!isImage && !isPdf) {
-        setError("Only images and PDFs are allowed.");
-        continue;
-      }
+    const valid = selected.filter((file) => {
+      const validType =
+        file.type.startsWith("image/") || file.type === "application/pdf";
+      const validSize = !maxFileSizeInBytes || file.size <= maxFileSizeInBytes;
+      return validType && validSize;
+    });
 
-      // size limit per file
-      if (maxFileSizeInBytes && file.size > maxFileSizeInBytes) {
-        setError(`"${file.name}" exceeds the size limit.`);
-        continue;
-      }
-
-      const id = `${file.name}-${file.size}-${Date.now() + Math.random()}`;
-      const previewUrl = isImage ? URL.createObjectURL(file) : undefined;
-      newPreviews.push({ id, file, previewUrl });
-    }
-
-    if (newPreviews.length === 0) return;
-
-    const updated = [...files, ...newPreviews];
-    setFiles(updated);
-    onChange?.(updated.map((p) => p.file));
+    setError("");
+    onChange([...files, ...valid]);
   };
 
-  const handleRemove = (id: string) => {
-    const toRemove = files.find((f) => f.id === id);
-    if (toRemove?.previewUrl) URL.revokeObjectURL(toRemove.previewUrl);
-    const updated = files.filter((f) => f.id !== id);
-    setFiles(updated);
-    onChange?.(updated.map((p) => p.file));
-  };
-
-  const onButtonClick = () => inputRef.current?.click();
+  const removeFile = (index: number) =>
+    onChange(files.filter((_, i) => i !== index));
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        gap: 2,
-        justifyContent: "space-between",
-      }}
-    >
+    <Box sx={{ display: "flex", gap: 2 }}>
+      {/* Upload Button */}
       <Box>
         <input
           ref={inputRef}
           type="file"
-          accept={accept}
+          hidden
           multiple
-          style={{ display: "none" }}
+          accept={accept}
           onChange={(e) => {
-            handleFilesSelected(e.target.files);
-            // reset input so same file can be reselected if removed
+            handleFiles(e.target.files);
             if (inputRef.current) inputRef.current.value = "";
           }}
         />
@@ -139,98 +83,58 @@ const MultiFileAttachment: React.FC<MultiFileAttachmentProps> = ({
         <Button
           variant="contained"
           startIcon={<AttachFileIcon />}
-          onClick={onButtonClick}
+          disabled={disabled}
+          onClick={() => inputRef.current?.click()}
         >
           Attach Files
         </Button>
+
+        {error && (
+          <Typography color="error" variant="caption">
+            {error}
+          </Typography>
+        )}
       </Box>
 
-      {/* {error && (
-        <Typography color="error" variant="body2" sx={{ mt: 1 }}>
-          {error}
-        </Typography>
-      )} */}
+      {/* Preview */}
+      <Grid container spacing={1} sx={{ maxHeight: 100, overflow: "auto" }}>
+        {files.map((file, index) => (
+          <Grid item key={`${file.name}-${index}`}>
+            <Paper
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                p: 1,
+              }}
+            >
+              {file.type.startsWith("image/") ? (
+                <ImageIcon />
+              ) : (
+                <PictureAsPdfIcon />
+              )}
 
-      {/* Preview Grid */}
-      <Grid
-        container
-        spacing={1}
-        sx={{ height: "100px", overflow: "auto", width: "70%" }}
-      >
-        {files.map((f) => {
-          const isImage = f.file.type.startsWith("image/");
-          return (
-            // <Grid item key={f.id} xs={12} sm={6} md={4}>
-            <Box key={f.id}>
-              <Paper
-                elevation={1}
-                sx={{
-                  display: "flex",
-                  gap: 1,
-                  p: 1,
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  alignItems="center"
-                  sx={{ height: "30px" }}
-                >
-                  {/* thumbnail or icon */}
-                  <Box
-                    sx={{
-                      width: 30,
-                      height: 30,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: 1,
-                      overflow: "hidden",
-                      bgcolor: "background.default",
-                      border: "1px solid",
-                      borderColor: "divider",
-                    }}
-                  >
-                    {isImage && f.previewUrl ? (
-                      // eslint-disable-next-line jsx-a11y/img-redundant-alt
-                      <img
-                        src={f.previewUrl}
-                        alt={f.file.name}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
-                      />
-                    ) : f.file.type === "application/pdf" ? (
-                      <PictureAsPdfIcon fontSize="large" />
-                    ) : (
-                      <ImageIcon />
-                    )}
-                  </Box>
+              <Box>
+                <Typography noWrap maxWidth={120}>
+                  {file.name}
+                </Typography>
+                <Typography variant="caption">
+                  {formatSize(file.size)}
+                </Typography>
+              </Box>
 
-                  <Box>
-                    <Typography>{truncate(f.file.name, 10)}</Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {formatSize(f.file.size)}
-                    </Typography>
-                  </Box>
-                </Stack>
-
+              {!disabled && (
                 <IconButton
                   size="small"
                   color="error"
-                  onClick={() => handleRemove(f.id)}
+                  onClick={() => removeFile(index)}
                 >
                   <DeleteIcon />
                 </IconButton>
-              </Paper>
-            </Box>
-            // </Grid>
-          );
-        })}
+              )}
+            </Paper>
+          </Grid>
+        ))}
       </Grid>
     </Box>
   );

@@ -49,7 +49,6 @@ const Login: React.FC = () => {
       const res = await login({ email, password }).unwrap();
 
       if (res.status) {
-        sessionStorage.setItem("token", res.token);
         navigate("/home");
       }
     } catch (error) {

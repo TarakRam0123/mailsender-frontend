@@ -8,7 +8,7 @@ const Output = ({ data }: OutputProps) => {
   return (
     <Box
       sx={{
-        height: "100%",
+        height: "80%",
         p: 2,
         overflowY: "scroll",
         border: 1,

@@ -1,12 +1,20 @@
 import { useState } from "react";
 import { Box, TextField, Button } from "@mui/material";
+import { useGetDraftQuery } from "../redux/apiSlice";
+type MailcontentProps = {
+  files: File[];
+};
+const SendOptions: React.FC<MailcontentProps> = ({ files }) => {
+  const [email, setEmail] = useState<string>("");
+  const { data, isLoading } = useGetDraftQuery();
 
-const SendOptions = () => {
-  const [message, setMessage] = useState("");
+  if (!isLoading) {
+    console.log(data?.draft?.subject, "send options");
+  }
 
   const handleSend = () => {
-    if (!message.trim()) return;
-    const mails = message.split(",").map((mail) => mail.trim());
+    if (!email.trim()) return;
+    const mails = email.split(",").map((mail) => mail.trim());
     console.log("Sending message to:", mails);
   };
 
@@ -22,8 +30,8 @@ const SendOptions = () => {
       <TextField
         label="Enter message"
         variant="outlined"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         sx={{ width: "90%" }}
       />
 
