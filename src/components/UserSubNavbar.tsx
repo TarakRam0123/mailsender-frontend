@@ -8,23 +8,26 @@ interface Props {
 
 const UserSubNavbar: React.FC<Props> = ({ username }) => {
   return (
-    <Box
-      sx={{
-        height: "45px",
-        // backgroundColor: "#f5f5f5",
-        // borderBottom: "1px solid #ddd",
-        display: "flex",
-        alignItems: "center",
-        px: 3,
-        gap: 2,
-        borderRadius: "30px",
-      }}
-    >
-      <Avatar>{username.charAt(0).toUpperCase()}</Avatar>
+    <Box>
+      <Box
+        sx={{
+          height: "45px",
+          backgroundColor: "#f5f5f5",
+          // borderBottom: "1px solid #ddd",
+          display: "flex",
+          alignItems: "center",
+          px: 2,
+          gap: 2,
+          margin: 0.5,
+          borderRadius: "30px",
+        }}
+      >
+        <Avatar>{username.charAt(0).toUpperCase()}</Avatar>
 
-      <Typography fontWeight={600} color={theme.palette.primary.main}>
-        {username}
-      </Typography>
+        <Typography fontWeight={600} color={theme.palette.primary.main}>
+          {username}
+        </Typography>
+      </Box>
     </Box>
   );
 };
