@@ -4,6 +4,7 @@ import MultiFileAttachment from "./MultiFileAttachment";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveAsIcon from "@mui/icons-material/SaveAs";
 import { useGetDraftQuery, useSaveDraftMutation } from "../redux/apiSlice";
+import RichTextEditor from "./RichTextEditor";
 type MailcontentProps = {
   files: File[];
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
@@ -68,8 +69,8 @@ const Mailcontent: React.FC<MailcontentProps> = ({ files, setFiles }) => {
           disabled={!edit}
         />
 
-        <TextField
-          label="Message"
+        {/* <TextField
+          label="Body"
           placeholder="Type your message here..."
           multiline
           fullWidth
@@ -81,7 +82,8 @@ const Mailcontent: React.FC<MailcontentProps> = ({ files, setFiles }) => {
             "& .MuiInputBase-root": { alignItems: "flex-start" },
             "& textarea": { overflowY: "auto" },
           }}
-        />
+        /> */}
+        <RichTextEditor value={body} onChange={setBody} editable={edit} />
 
         <MultiFileAttachment
           files={files}
