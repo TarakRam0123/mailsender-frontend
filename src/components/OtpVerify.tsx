@@ -83,9 +83,13 @@ const OtpVerify: React.FC = () => {
               inputRef={(el) => (inputsRef.current[index] = el)}
               value={digit}
               onChange={(e) => handleOtpChange(e.target.value, index)}
-              onKeyDown={(e) => handleKeyDown(e, index)}
               inputProps={{
                 maxLength: 1,
+                onKeyDown: (e) =>
+                  handleKeyDown(
+                    e as React.KeyboardEvent<HTMLInputElement>,
+                    index
+                  ),
                 style: {
                   textAlign: "center",
                   fontSize: 20,
