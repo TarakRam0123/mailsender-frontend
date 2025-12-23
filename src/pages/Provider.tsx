@@ -4,7 +4,7 @@ import { Box, Card, CardContent, Typography, Button } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useCheckGoogleQuery } from "../redux/apiSlice";
 
-const API = "http://localhost:5500";
+const API = import.meta.env.VITE_API_URL;
 
 const Provider = () => {
   const navigate = useNavigate();
