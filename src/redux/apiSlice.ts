@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import type { Draft, GetDraftResponse, GetUserResponse, loginReq, loginResponse, response, SaveDraftPayload } from "./interfaces"
+import type { Draft, GetDraftResponse, GetUserResponse, loginReq, loginResponse, response, SaveDraftPayload, sendMailRes } from "./interfaces"
 
 const API = import.meta.env.VITE_API_URL
 export const apiSlice = createApi({
     reducerPath: "authapi",
     baseQuery: fetchBaseQuery({ baseUrl: API, credentials: "include", }),
-    tagTypes: ["Auth", "Draft"],
+    tagTypes: ["Auth", "Draft", "GetMails"],
     endpoints: (e) => ({
         register: e.mutation({
             query: (body) => ({ url: "api/auth/register", method: "POST", body }),
@@ -30,7 +30,14 @@ export const apiSlice = createApi({
         }),
         saveDraft: e.mutation<response, SaveDraftPayload>({
             query: (body) => ({ url: "mail/saveDraft", method: "POST", body }), invalidatesTags: ["Draft"]
+        }),
+        sendMail: e.mutation<sendMailRes, any>({
+            query: (body) => ({ url: "/send/google", method: "POST", body }), invalidatesTags: ["GetMails"]
+        }),
+        getPreviousMails: e.query<any, void>({
+            query: () => ({ url: "/mail/getprevious", method: "GET" }), providesTags: ["GetMails"]
         })
+
 
     })
 
@@ -42,7 +49,9 @@ export const { useRegisterMutation,
     useCheckGoogleQuery,
     useGetUserQuery,
     useGetDraftQuery,
-    useSaveDraftMutation } = apiSlice
+    useSaveDraftMutation,
+    useSendMailMutation,
+    useGetPreviousMailsQuery } = apiSlice
 
 
 

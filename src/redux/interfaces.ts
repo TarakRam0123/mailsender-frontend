@@ -27,3 +27,9 @@ export type SaveDraftPayload = {
     subject: string;
     body: string;
 };
+
+
+export type sendMailRes = {
+    message: string,
+    status: boolean
+}

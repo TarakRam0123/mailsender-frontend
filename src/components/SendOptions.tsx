@@ -1,21 +1,37 @@
 import { useState } from "react";
 import { Box, TextField, Button } from "@mui/material";
-import { useGetDraftQuery } from "../redux/apiSlice";
+import { useSendMailMutation } from "../redux/apiSlice";
 type MailcontentProps = {
   files: File[];
 };
 const SendOptions: React.FC<MailcontentProps> = ({ files }) => {
   const [email, setEmail] = useState<string>("");
-  const { data, isLoading } = useGetDraftQuery();
+  const [sendMail, { isLoading }] = useSendMailMutation();
 
-  if (!isLoading) {
-    console.log(data?.draft?.subject, "send options");
-  }
+  const handleSend = async () => {
+    try {
+      if (!email.trim()) return;
 
-  const handleSend = () => {
-    if (!email.trim()) return;
-    const mails = email.split(",").map((mail) => mail.trim());
-    console.log("Sending message to:", mails);
+      const recipients = email
+        .split(",")
+        .map((e) => e.trim())
+        .filter(Boolean);
+
+      for (const to of recipients) {
+        const formData = new FormData();
+        formData.append("to", to);
+
+        files.forEach((file) => {
+          formData.append("files", file); // KEY MUST MATCH
+        });
+
+        await sendMail(formData).unwrap();
+      }
+      setEmail("");
+      console.log("All mails sent");
+    } catch (err) {
+      console.error("Send failed", err);
+    }
   };
 
   return (
@@ -45,6 +61,7 @@ const SendOptions: React.FC<MailcontentProps> = ({ files }) => {
           textTransform: "none",
           fontWeight: 600,
         }}
+        disabled={isLoading}
       >
         Send
       </Button>

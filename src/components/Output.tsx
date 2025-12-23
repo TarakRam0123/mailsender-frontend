@@ -1,10 +1,13 @@
 import { Typography, Box } from "@mui/material";
+import { useGetPreviousMailsQuery } from "../redux/apiSlice";
 
-type OutputProps = {
-  data?: string;
-};
+// type OutputProps = {
+//   data?: string;
+// };
 
-const Output = ({ data }: OutputProps) => {
+const Output = () => {
+  const { data, isLoading } = useGetPreviousMailsQuery();
+  console.log(data?.previousTo);
   return (
     <Box
       sx={{
@@ -19,10 +22,17 @@ const Output = ({ data }: OutputProps) => {
       <Typography variant="h6" gutterBottom color="primary.main">
         Sent Mails
       </Typography>
-
-      <Typography variant="body2" color="primary.main">
-        {data || "No sent mails available"}
-      </Typography>
+      {data ? (
+        data?.previousTo.map((item: any) => (
+          <Typography variant="body2" color="primary.main">
+            {item.email}
+          </Typography>
+        ))
+      ) : (
+        <Typography variant="body2" color="primary.main">
+          {"No sent mails available"}
+        </Typography>
+      )}
     </Box>
   );
 };
