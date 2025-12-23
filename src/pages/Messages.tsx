@@ -48,12 +48,62 @@ const Messages: React.FC = () => {
       time: "Wed",
       unread: 3,
     },
+    {
+      id: 1,
+      name: "Taraka Ram Anna TechU",
+      lastMessage: "https://azmovies...",
+      time: "Tue",
+      unread: 1,
+    },
+    {
+      id: 2,
+      name: "Anupama Parameswaran",
+      lastMessage: "Namaste React course",
+      time: "Wed",
+      unread: 3,
+    },
+    {
+      id: 1,
+      name: "Taraka Ram Anna TechU",
+      lastMessage: "https://azmovies...",
+      time: "Tue",
+      unread: 1,
+    },
+    {
+      id: 2,
+      name: "Anupama Parameswaran",
+      lastMessage: "Namaste React course",
+      time: "Wed",
+      unread: 3,
+    },
+    {
+      id: 1,
+      name: "Taraka Ram Anna TechU",
+      lastMessage: "https://azmovies...",
+      time: "Tue",
+      unread: 1,
+    },
+    {
+      id: 2,
+      name: "Anupama Parameswaran",
+      lastMessage: "Namaste React course",
+      time: "Wed",
+      unread: 3,
+    },
   ];
 
   const [activeUser, setActiveUser] = useState(users[0]);
   const [input, setInput] = useState("");
 
   const [messages, setMessages] = useState<Message[]>([
+    { id: 1, sender: "me", text: "Hello!", time: "06:25 PM" },
+    { id: 2, sender: "other", text: "Hi!", time: "06:26 PM" },
+    { id: 1, sender: "me", text: "Hello!", time: "06:25 PM" },
+    { id: 2, sender: "other", text: "Hi!", time: "06:26 PM" },
+    { id: 1, sender: "me", text: "Hello!", time: "06:25 PM" },
+    { id: 2, sender: "other", text: "Hi!", time: "06:26 PM" },
+    { id: 1, sender: "me", text: "Hello!", time: "06:25 PM" },
+    { id: 2, sender: "other", text: "Hi!", time: "06:26 PM" },
     { id: 1, sender: "me", text: "Hello!", time: "06:25 PM" },
     { id: 2, sender: "other", text: "Hi!", time: "06:26 PM" },
   ]);
@@ -81,9 +131,9 @@ const Messages: React.FC = () => {
   }, [messages]);
 
   return (
-    <Box display="flex" height="91vh" bgcolor="background.default">
+    <Box display="flex" height="84vh" bgcolor="background.default">
       {/* LEFT SIDEBAR */}
-      <Box width={360} bgcolor="background.paper">
+      <Box width={400} bgcolor="background.paper">
         <Box p={2}>
           <TextField
             fullWidth
@@ -96,36 +146,42 @@ const Messages: React.FC = () => {
             }}
           />
         </Box>
+        <Box
+          sx={{
+            height: "70vh",
+            overflow: "auto",
+          }}
+        >
+          <List>
+            {users.map((user) => (
+              <React.Fragment key={user.id}>
+                <ListItemButton
+                  selected={activeUser.id === user.id}
+                  onClick={() => setActiveUser(user)}
+                >
+                  <ListItemAvatar>
+                    <Avatar sx={{ bgcolor: "primary.main" }}>
+                      {user.name[0]}
+                    </Avatar>
+                  </ListItemAvatar>
 
-        <List>
-          {users.map((user) => (
-            <React.Fragment key={user.id}>
-              <ListItemButton
-                selected={activeUser.id === user.id}
-                onClick={() => setActiveUser(user)}
-              >
-                <ListItemAvatar>
-                  <Avatar sx={{ bgcolor: "primary.main" }}>
-                    {user.name[0]}
-                  </Avatar>
-                </ListItemAvatar>
+                  <ListItemText
+                    primary={user.name}
+                    secondary={user.lastMessage}
+                  />
 
-                <ListItemText
-                  primary={user.name}
-                  secondary={user.lastMessage}
-                />
-
-                <Box textAlign="right">
-                  <Typography fontSize={12}>{user.time}</Typography>
-                  {user.unread && (
-                    <Badge badgeContent={user.unread} color="secondary" />
-                  )}
-                </Box>
-              </ListItemButton>
-              <Divider />
-            </React.Fragment>
-          ))}
-        </List>
+                  <Box textAlign="right">
+                    <Typography fontSize={12}>{user.time}</Typography>
+                    {user.unread && (
+                      <Badge badgeContent={user.unread} color="secondary" />
+                    )}
+                  </Box>
+                </ListItemButton>
+                <Divider />
+              </React.Fragment>
+            ))}
+          </List>
+        </Box>
       </Box>
 
       {/* RIGHT CHAT */}

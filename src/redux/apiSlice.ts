@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import type { Draft, GetDraftResponse, GetUserResponse, response, SaveDraftPayload } from "./interfaces"
+import type { Draft, GetDraftResponse, GetUserResponse, loginReq, loginResponse, response, SaveDraftPayload } from "./interfaces"
 
 const API = import.meta.env.VITE_API_URL
 export const apiSlice = createApi({
@@ -10,7 +10,7 @@ export const apiSlice = createApi({
         register: e.mutation({
             query: (body) => ({ url: "api/auth/register", method: "POST", body }),
         }),
-        login: e.mutation({
+        login: e.mutation<loginResponse, loginReq>({
             query: (body) => ({ url: "api/auth/login", method: "POST", body }), invalidatesTags: ["Auth"]
         }),
         logout: e.mutation<response, void>({

@@ -1,3 +1,12 @@
+export type loginResponse = {
+    message: string,
+    status: boolean,
+    token: string
+}
+export type loginReq = {
+    email: string,
+    password: string
+}
 export type response = { status: boolean; message: string }
 export interface GetUserResponse {
     status: boolean;
