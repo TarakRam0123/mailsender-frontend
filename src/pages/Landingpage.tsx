@@ -18,7 +18,6 @@ const Landingpage = () => {
       <Box
         sx={{
           flex: 3,
-
           overflow: "hidden",
         }}
       >
@@ -32,7 +31,7 @@ const Landingpage = () => {
           display: "flex",
           flexDirection: "column",
           p: 2,
-          gap: 2,
+          gap: 1,
           height: "580px",
         }}
       >
