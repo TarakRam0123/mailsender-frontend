@@ -57,7 +57,7 @@ const Profile: React.FC = () => {
 
   return (
     <Box
-      minHeight="91.5vh"
+      minHeight="84vh"
       bgcolor="background.default"
       display="flex"
       justifyContent="center"
@@ -187,9 +187,14 @@ const Profile: React.FC = () => {
 
             <Divider sx={{ my: 2 }} />
 
-            <Button variant="outlined" color="error">
-              Close Account
-            </Button>
+            <Box display="flex" justifyContent={"space-between"}>
+              <Button variant="outlined" color="error">
+                Close Account
+              </Button>
+              <Button variant="outlined" color="error">
+                Change Password
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Paper>

@@ -25,6 +25,7 @@ const SendOptions: React.FC<MailcontentProps> = ({ files }) => {
         gap: 2,
         alignItems: "center",
         width: "100%",
+        marginTop: 2.5,
       }}
     >
       <TextField
@@ -32,7 +33,7 @@ const SendOptions: React.FC<MailcontentProps> = ({ files }) => {
         variant="outlined"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        sx={{ width: "90%" }}
+        sx={{ width: "90%", backgroundColor: "background.paper" }}
       />
 
       <Button

@@ -8,12 +8,13 @@ const Output = ({ data }: OutputProps) => {
   return (
     <Box
       sx={{
-        height: "80%",
+        height: "77%",
         p: 2,
         overflowY: "scroll",
         border: 1,
         borderColor: "grey.400",
         borderRadius: 1,
+        backgroundColor: "background.paper",
       }}
     >
       <Typography variant="h6" gutterBottom color="primary.main">

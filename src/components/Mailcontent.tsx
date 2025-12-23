@@ -45,13 +45,27 @@ const Mailcontent: React.FC<MailcontentProps> = ({ files, setFiles }) => {
       {/* Edit / Save button */}
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         {edit ? (
-          <Box sx={{ display: "flex", justifyContent: "end" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "end",
+              backgroundColor: "background.paper",
+              borderRadius: 1,
+            }}
+          >
             <Button onClick={handleUpdate}>
               <SaveAsIcon />
             </Button>
           </Box>
         ) : (
-          <Box sx={{ display: "flex", justifyContent: "end" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "end",
+              backgroundColor: "background.paper",
+              borderRadius: 1,
+            }}
+          >
             <Button onClick={handleUpdate}>
               <EditIcon />
             </Button>
