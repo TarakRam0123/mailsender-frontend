@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import type { Draft, GetDraftResponse, GetUserResponse, loginReq, loginResponse, response, SaveDraftPayload, sendMailRes } from "./interfaces"
+import type { Draft, GetDraftResponse, GetUserResponse, loginReq, loginResponse, response, SaveDraftPayload, sendMailRes, UserDetails } from "./interfaces"
 
 const API = import.meta.env.VITE_API_URL
 export const apiSlice = createApi({
@@ -18,6 +18,9 @@ export const apiSlice = createApi({
         }),
         getUser: e.query<GetUserResponse, void>({
             query: () => ({ url: "api/auth/getUser", method: "GET" }), providesTags: ["Auth"],
+        }),
+        updateUser: e.mutation<response, UserDetails>({
+            query: () => ({ url: "api/auth/updateUser", method: "POST" }),
         }),
         checkGoogle: e.query({
             query: () => ({
@@ -48,6 +51,7 @@ export const { useRegisterMutation,
     useLogoutMutation,
     useCheckGoogleQuery,
     useGetUserQuery,
+    useUpdateUserMutation,
     useGetDraftQuery,
     useSaveDraftMutation,
     useSendMailMutation,

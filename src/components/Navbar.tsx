@@ -108,7 +108,7 @@ const Navbar: React.FC = () => {
 
       {/* Secondary navbar */}
       {!isFetching && isLoggedIn && (
-        <UserSubNavbar username={data.userDetails} />
+        <UserSubNavbar username={data?.userDetails?.name} />
       )}
     </>
   );

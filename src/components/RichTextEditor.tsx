@@ -48,7 +48,7 @@ const RichTextEditor: React.FC<Props> = ({ value, onChange, editable }) => {
         border: "1px solid",
         borderColor: editable ? "grey.400" : "grey.300",
         borderRadius: 1,
-        backgroundColor: editable ? "#fff" : "#fafafa",
+        backgroundColor: editable ? "background.default" : "background.paper",
         transition: "border-color 0.2s",
       }}
     >
@@ -61,7 +61,7 @@ const RichTextEditor: React.FC<Props> = ({ value, onChange, editable }) => {
             px: 1,
             py: 0.5,
             borderBottom: "1px solid #ddd",
-            backgroundColor: "#f9f9f9",
+            backgroundColor: "background.paper",
           }}
         >
           <Button
@@ -97,7 +97,7 @@ const RichTextEditor: React.FC<Props> = ({ value, onChange, editable }) => {
       {/* Editor body */}
       <Box
         sx={{
-          height: "340px", // 🔥 same feel as rows={17}
+          height: "380px", // 🔥 same feel as rows={17}
           overflowY: "auto", // 🔥 internal scroll
           px: 1.5,
           py: 1,

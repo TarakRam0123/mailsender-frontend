@@ -81,22 +81,11 @@ const Mailcontent: React.FC<MailcontentProps> = ({ files, setFiles }) => {
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
           disabled={!edit}
-        />
-
-        {/* <TextField
-          label="Body"
-          placeholder="Type your message here..."
-          multiline
-          fullWidth
-          rows={17}
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          disabled={!edit}
           sx={{
-            "& .MuiInputBase-root": { alignItems: "flex-start" },
-            "& textarea": { overflowY: "auto" },
+            backgroundColor: edit ? "background.default" : "background.paper",
+            borderRadius: 1,
           }}
-        /> */}
+        />
         <RichTextEditor value={body} onChange={setBody} editable={edit} />
 
         <MultiFileAttachment

@@ -13,41 +13,44 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
+import { useGetUserQuery, useUpdateUserMutation } from "../redux/apiSlice";
 
 const Profile: React.FC = () => {
   const theme = useTheme();
+  const { data, refetch } = useGetUserQuery();
+  const [updateUser] = useUpdateUserMutation();
 
   const [isEditing, setIsEditing] = useState(false);
-
-  const [profile, setProfile] = useState({
-    name: "Lokeshwar Panuganti",
-    email: "panugantilokeshwar@gmail.com",
-    phone: "",
-    bio: "",
+  const [profileDetails, setprofileDetails] = useState({
+    name: data?.userDetails.name,
+    email: data?.userDetails.email,
+    avatar: data?.userDetails.avatar,
+    mobile: data?.userDetails.mobile,
+    bio: data?.userDetails.bio,
   });
 
-  // Backup for cancel
-  const [draftProfile, setDraftProfile] = useState(profile);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setProfile({ ...profile, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setprofileDetails((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleEdit = () => {
-    setDraftProfile(profile);
-    setIsEditing(true);
-  };
+  const handleEdit = async () => {
+    try {
+      if (!isEditing) {
+        setIsEditing(true);
 
-  const handleCancel = () => {
-    setProfile(draftProfile);
-    setIsEditing(false);
-  };
-
-  const handleSave = () => {
-    // 🔹 API CALL GOES HERE
-    console.log("Saved Profile:", profile);
-
-    setIsEditing(false);
+        return;
+      }
+      const res = await updateUser(profileDetails);
+      if (res.data?.status) {
+        setIsEditing(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleAvatarEdit = () => {
@@ -76,28 +79,13 @@ const Profile: React.FC = () => {
           <Typography variant="h6">Profile</Typography>
 
           {!isEditing ? (
-            <Button
-              variant="outlined"
-              startIcon={<EditIcon />}
-              onClick={handleEdit}
-            >
-              Edit
+            <Button variant="outlined" onClick={handleEdit}>
+              <EditIcon />
             </Button>
           ) : (
             <Box display="flex" gap={1}>
-              <Button
-                variant="contained"
-                startIcon={<SaveIcon />}
-                onClick={handleSave}
-              >
-                Save
-              </Button>
-              <Button
-                variant="outlined"
-                startIcon={<CloseIcon />}
-                onClick={handleCancel}
-              >
-                Cancel
+              <Button variant="contained" onClick={handleEdit}>
+                <SaveIcon />
               </Button>
             </Box>
           )}
@@ -122,7 +110,7 @@ const Profile: React.FC = () => {
                   fontSize: 48,
                 }}
               >
-                {profile.name[0]}
+                {profileDetails.avatar}
               </Avatar>
 
               {isEditing && (
@@ -142,10 +130,10 @@ const Profile: React.FC = () => {
             </Box>
 
             <Typography mt={2} fontWeight={600}>
-              {profile.name}
+              {profileDetails.name}
             </Typography>
             <Typography fontSize={13} color="text.secondary">
-              {profile.email}
+              {profileDetails.email}
             </Typography>
           </Box>
 
@@ -153,22 +141,17 @@ const Profile: React.FC = () => {
           <Box flex={1} display="flex" flexDirection="column" gap={2}>
             <TextField
               label="Name"
-              value={profile.name}
-              InputProps={{ readOnly: true }}
+              name="Name"
+              value={profileDetails.name}
               fullWidth
-            />
-
-            <TextField
-              label="Email"
-              value={profile.email}
-              InputProps={{ readOnly: true }}
-              fullWidth
+              disabled={!isEditing}
+              onChange={handleChange}
             />
 
             <TextField
               label="Phone Number"
-              name="phone"
-              value={profile.phone}
+              name="mobile"
+              value={profileDetails?.mobile}
               onChange={handleChange}
               disabled={!isEditing}
               fullWidth
@@ -177,7 +160,7 @@ const Profile: React.FC = () => {
             <TextField
               label="Bio"
               name="bio"
-              value={profile.bio}
+              value={profileDetails.bio}
               onChange={handleChange}
               multiline
               rows={3}

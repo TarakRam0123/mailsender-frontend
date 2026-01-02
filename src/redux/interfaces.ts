@@ -11,7 +11,14 @@ export type response = { status: boolean; message: string }
 export interface GetUserResponse {
     status: boolean;
     message: string;
-    userDetails: string;
+    userDetails: UserDetails;
+}
+export interface UserDetails {
+    name: string | undefined;
+    email: string | undefined;
+    mobile: string | undefined,
+    avatar: string | undefined,
+    bio: string | undefined
 }
 export type Draft = {
     subject: string;
@@ -27,8 +34,6 @@ export type SaveDraftPayload = {
     subject: string;
     body: string;
 };
-
-
 export type sendMailRes = {
     message: string,
     status: boolean
