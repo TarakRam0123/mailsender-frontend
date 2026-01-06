@@ -45,7 +45,8 @@ const Profile: React.FC = () => {
         return;
       }
       const res = await updateUser(profileDetails).unwrap();
-      if (res.data?.status) {
+
+      if (res?.status) {
         setIsEditing(false);
         refetch();
       }
@@ -142,7 +143,7 @@ const Profile: React.FC = () => {
           <Box flex={1} display="flex" flexDirection="column" gap={2}>
             <TextField
               label="Name"
-              name="Name"
+              name="name"
               value={profileDetails.name}
               fullWidth
               disabled={!isEditing}
