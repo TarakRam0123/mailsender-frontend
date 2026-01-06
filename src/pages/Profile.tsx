@@ -17,7 +17,7 @@ import { useGetUserQuery, useUpdateUserMutation } from "../redux/apiSlice";
 
 const Profile: React.FC = () => {
   const theme = useTheme();
-  const { data } = useGetUserQuery();
+  const { data, refetch } = useGetUserQuery();
   const [updateUser] = useUpdateUserMutation();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -44,9 +44,10 @@ const Profile: React.FC = () => {
 
         return;
       }
-      const res = await updateUser(profileDetails);
+      const res = await updateUser(profileDetails).unwrap();
       if (res.data?.status) {
         setIsEditing(false);
+        refetch();
       }
     } catch (error) {
       console.log(error);
