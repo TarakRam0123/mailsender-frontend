@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
-import CloseIcon from "@mui/icons-material/Close";
+
 import { useTheme } from "@mui/material/styles";
 import { useGetUserQuery, useUpdateUserMutation } from "../redux/apiSlice";
 
