@@ -10,7 +10,7 @@ const Provider = () => {
   const navigate = useNavigate();
 
   // 🔥 RTK Query call (cookie auto-sent)
-  const { data, isLoading, isError } = useCheckGoogleQuery();
+  const { data, isLoading, isError } = useCheckGoogleQuery(undefined);
 
   useEffect(() => {
     if (data?.googleConnected) {
