@@ -5,7 +5,6 @@ import {
   Chip,
   Container,
   Paper,
-  Button,
   Avatar,
   Grid,
 } from "@mui/material";
@@ -586,7 +585,7 @@ const Welcome = () => {
               justifyContent={"center"}
             >
               {cards.map((category, index) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                <Grid xs={12} sm={6} md={4} lg={3} key={index}>
                   <Box
                     sx={{
                       p: 4,
@@ -694,7 +693,7 @@ const Welcome = () => {
                 avatar: "PS",
               },
             ].map((testimonial, index) => (
-              <Grid item xs={12} md={4} key={index}>
+              <Grid xs={12} md={4} key={index}>
                 <Paper
                   elevation={0}
                   sx={{
@@ -1124,7 +1123,7 @@ const Welcome = () => {
                 icon: <LanguageIcon />,
               },
             ].map((value, index) => (
-              <Grid item xs={12} md={6} key={index}>
+              <Grid xs={12} md={6} key={index}>
                 <Box sx={{ display: "flex", gap: 3, p: 3 }}>
                   <Box
                     sx={{
@@ -1265,7 +1264,7 @@ const Welcome = () => {
                 icon: <TrendingUpIcon />,
               },
             ].map((feature, index) => (
-              <Grid item xs={12} sm={6} lg={3} key={index}>
+              <Grid xs={12} sm={6} lg={3} key={index}>
                 <Paper
                   elevation={0}
                   sx={{

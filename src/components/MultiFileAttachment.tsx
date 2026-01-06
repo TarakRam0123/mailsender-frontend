@@ -99,7 +99,7 @@ const MultiFileAttachment: React.FC<Props> = ({
       {/* Preview */}
       <Grid container spacing={1} sx={{ maxHeight: 100, overflow: "auto" }}>
         {files.map((file, index) => (
-          <Grid item key={`${file.name}-${index}`}>
+          <Grid key={`${file.name}-${index}`}>
             <Paper
               sx={{
                 display: "flex",
