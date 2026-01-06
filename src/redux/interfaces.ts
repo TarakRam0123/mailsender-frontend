@@ -13,7 +13,7 @@ export interface GetUserResponse {
     message: string;
     userDetails: UserDetails;
 }
-export type UserDetails {
+export type UserDetails = {
     name: string | undefined;
     email: string | undefined;
     mobile: string | undefined,

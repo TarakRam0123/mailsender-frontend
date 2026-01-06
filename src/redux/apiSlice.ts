@@ -20,7 +20,7 @@ export const apiSlice = createApi({
             query: () => ({ url: "api/auth/getUser", method: "GET" }), providesTags: ["Auth"],
         }),
         updateUser: e.mutation<response, UserDetails>({
-            query: (body) => ({ url: "api/auth/updateUser", method: "POST", body }),
+            query: (body) => ({ url: "api/auth/updateUser", method: "PUT", body }),
         }),
         checkGoogle: e.query({
             query: () => ({
