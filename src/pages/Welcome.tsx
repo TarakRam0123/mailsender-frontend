@@ -6,7 +6,6 @@ import {
   Container,
   Paper,
   Avatar,
-  Grid,
 } from "@mui/material";
 // import React from "react";
 import hero from "../assets/hero2.jpg";
@@ -37,8 +36,7 @@ import SchoolIcon from "@mui/icons-material/School";
 // import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 // import SettingsIcon from "@mui/icons-material/Settings";
 // import EmojiObjectsIcon from "@mui/icons-material/EmojiObjects";
-import LoginIcon from "@mui/icons-material/Login";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import Grid from "@mui/material/Grid";
 import LanguageIcon from "@mui/icons-material/Language";
 import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
 import DesignServicesIcon from "@mui/icons-material/DesignServices";

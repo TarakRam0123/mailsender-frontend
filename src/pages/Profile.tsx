@@ -17,7 +17,7 @@ import { useGetUserQuery, useUpdateUserMutation } from "../redux/apiSlice";
 
 const Profile: React.FC = () => {
   const theme = useTheme();
-  const { data, refetch } = useGetUserQuery();
+  const { data } = useGetUserQuery();
   const [updateUser] = useUpdateUserMutation();
 
   const [isEditing, setIsEditing] = useState(false);

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import type { Draft, GetDraftResponse, GetUserResponse, loginReq, loginResponse, response, SaveDraftPayload, sendMailRes, UserDetails } from "./interfaces"
+import type { GetDraftResponse, GetUserResponse, loginReq, loginResponse, response, SaveDraftPayload, sendMailRes, UserDetails } from "./interfaces"
 
 const API = import.meta.env.VITE_API_URL
 export const apiSlice = createApi({
