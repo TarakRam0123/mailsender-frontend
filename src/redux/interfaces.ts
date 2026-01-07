@@ -38,3 +38,6 @@ export type sendMailRes = {
     message: string,
     status: boolean
 }
+export type passwordReq = {
+    newPassword: string
+}

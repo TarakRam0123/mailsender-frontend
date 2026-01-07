@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Avatar,
@@ -11,9 +11,10 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
-
 import { useTheme } from "@mui/material/styles";
+
 import { useGetUserQuery, useUpdateUserMutation } from "../redux/apiSlice";
+import ChangePasswordModal from "./ChangePasswordModal";
 
 const Profile: React.FC = () => {
   const theme = useTheme();
@@ -21,90 +22,82 @@ const Profile: React.FC = () => {
   const [updateUser] = useUpdateUserMutation();
 
   const [isEditing, setIsEditing] = useState(false);
-  const [profileDetails, setprofileDetails] = useState({
-    name: data?.userDetails.name,
-    email: data?.userDetails.email,
-    avatar: data?.userDetails.avatar,
-    mobile: data?.userDetails.mobile,
-    bio: data?.userDetails.bio,
+  const [open, setOpen] = useState(false);
+
+  const [profileDetails, setProfileDetails] = useState({
+    name: "",
+    email: "",
+    avatar: "",
+    mobile: "",
+    bio: "",
   });
+
+  /* 🔥 Sync API data to state */
+  useEffect(() => {
+    if (data?.userDetails) {
+      setProfileDetails({
+        name: data.userDetails.name ?? "",
+        email: data.userDetails.email ?? "",
+        avatar: data.userDetails.avatar ?? "",
+        mobile: data.userDetails.mobile ?? "",
+        bio: data.userDetails.bio ?? "",
+      });
+    }
+  }, [data]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setprofileDetails((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setProfileDetails((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleEdit = async () => {
+  const handleSave = async () => {
     try {
-      if (!isEditing) {
-        setIsEditing(true);
-
-        return;
-      }
       const res = await updateUser(profileDetails).unwrap();
-
       if (res?.status) {
         setIsEditing(false);
         refetch();
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.error(err);
     }
-  };
-
-  const handleAvatarEdit = () => {
-    console.log("Avatar edit clicked");
-    // 🔹 Open file picker or modal here
   };
 
   return (
     <Box
       minHeight="84vh"
-      bgcolor="background.default"
       display="flex"
       justifyContent="center"
       alignItems="center"
       p={2}
     >
-      <Paper
-        sx={{
-          width: "100%",
-          maxWidth: 1000,
-          p: 3,
-          bgcolor: "background.paper",
-        }}
-      >
-        <Box display="flex" justifyContent="space-between" alignItems="center">
+      <Paper sx={{ width: "100%", maxWidth: 1000, p: 3 }}>
+        <Box display="flex" justifyContent="space-between">
           <Typography variant="h6">Profile</Typography>
 
           {!isEditing ? (
-            <Button variant="outlined" onClick={handleEdit}>
+            <Button variant="outlined" onClick={() => setIsEditing(true)}>
               <EditIcon />
             </Button>
           ) : (
-            <Box display="flex" gap={1}>
-              <Button variant="contained" onClick={handleEdit}>
-                <SaveIcon />
-              </Button>
-            </Box>
+            <Button variant="contained" onClick={handleSave}>
+              <SaveIcon />
+            </Button>
           )}
         </Box>
 
         <Divider sx={{ my: 3 }} />
 
         <Box display="flex" gap={4}>
-          {/* LEFT SIDE – AVATAR */}
+          {/* Avatar */}
           <Box
             width={250}
+            alignItems="center"
             display="flex"
             flexDirection="column"
-            alignItems="center"
           >
             <Box position="relative">
               <Avatar
+                src={profileDetails.avatar}
                 sx={{
                   width: 160,
                   height: 160,
@@ -112,18 +105,16 @@ const Profile: React.FC = () => {
                   fontSize: 48,
                 }}
               >
-                {profileDetails.avatar}
+                {!profileDetails.avatar && profileDetails.name?.[0]}
               </Avatar>
 
               {isEditing && (
                 <IconButton
-                  onClick={handleAvatarEdit}
                   sx={{
                     position: "absolute",
                     bottom: 8,
                     right: 8,
                     bgcolor: "background.paper",
-                    boxShadow: 1,
                   }}
                 >
                   <EditIcon color="primary" />
@@ -139,21 +130,21 @@ const Profile: React.FC = () => {
             </Typography>
           </Box>
 
-          {/* RIGHT SIDE – DETAILS */}
+          {/* Details */}
           <Box flex={1} display="flex" flexDirection="column" gap={2}>
             <TextField
               label="Name"
               name="name"
               value={profileDetails.name}
-              fullWidth
-              disabled={!isEditing}
               onChange={handleChange}
+              disabled={!isEditing}
+              fullWidth
             />
 
             <TextField
               label="Phone Number"
               name="mobile"
-              value={profileDetails?.mobile}
+              value={profileDetails.mobile}
               onChange={handleChange}
               disabled={!isEditing}
               fullWidth
@@ -172,17 +163,23 @@ const Profile: React.FC = () => {
 
             <Divider sx={{ my: 2 }} />
 
-            <Box display="flex" justifyContent={"space-between"}>
+            <Box display="flex" justifyContent="space-between">
               <Button variant="outlined" color="error">
                 Close Account
               </Button>
-              <Button variant="outlined" color="error">
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => setOpen(true)}
+              >
                 Change Password
               </Button>
             </Box>
           </Box>
         </Box>
       </Paper>
+
+      <ChangePasswordModal open={open} handleClose={() => setOpen(false)} />
     </Box>
   );
 };

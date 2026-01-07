@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import type { GetDraftResponse, GetUserResponse, loginReq, loginResponse, response, SaveDraftPayload, sendMailRes, UserDetails } from "./interfaces"
+import type { GetDraftResponse, GetUserResponse, loginReq, loginResponse, passwordReq, response, SaveDraftPayload, sendMailRes, UserDetails } from "./interfaces"
 
 const API = import.meta.env.VITE_API_URL
 export const apiSlice = createApi({
@@ -22,6 +22,9 @@ export const apiSlice = createApi({
         updateUser: e.mutation<response, UserDetails>({
             query: (body) => ({ url: "api/auth/updateUser", method: "POST", body }),
         }),
+        changePassword: e.mutation<sendMailRes, passwordReq>({
+            query: (body) => ({ url: "api/auth/changePassword", method: "PUT", body })
+        }),
         checkGoogle: e.query({
             query: () => ({
                 url: "me/google",
@@ -39,7 +42,8 @@ export const apiSlice = createApi({
         }),
         getPreviousMails: e.query<any, void>({
             query: () => ({ url: "/mail/getprevious", method: "GET" }), providesTags: ["GetMails"]
-        })
+        }),
+
 
 
     })
@@ -55,6 +59,7 @@ export const { useRegisterMutation,
     useGetDraftQuery,
     useSaveDraftMutation,
     useSendMailMutation,
+    useChangePasswordMutation,
     useGetPreviousMailsQuery } = apiSlice
 
 
