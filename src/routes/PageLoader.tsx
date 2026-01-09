@@ -5,11 +5,10 @@ const PageLoader = () => {
   return (
     <div
       style={{
-        height: "100vh",
+        height: "80vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        fontSize: "18px",
       }}
     >
       <CircularProgress color="success" />
