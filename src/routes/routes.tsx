@@ -1,63 +1,105 @@
+import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
-import Welcome from "../pages/Welcome";
 import ProtectedRoute from "./ProtectedRoute";
-import NotFound from "../pages/NotFound";
-import Messages from "../pages/Messages";
-import Landingpage from "../pages/Landingpage";
-import Profile from "../pages/Profile";
-import Provider from "../pages/Provider";
+import PageLoader from "./PageLoader";
+
+const Welcome = lazy(() => import("../pages/Welcome"));
+const Login = lazy(() => import("../pages/Login"));
+const Register = lazy(() => import("../pages/Register"));
+const Messages = lazy(() => import("../pages/Messages"));
+const Landingpage = lazy(() => import("../pages/Landingpage"));
+const Provider = lazy(() => import("../pages/Provider"));
+const Profile = lazy(() => import("../pages/Profile"));
+const NotFound = lazy(() => import("../pages/NotFound"));
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />, // 👈 Layout with Navbar
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <App />
+      </Suspense>
+    ),
     children: [
       {
-        index: true, // 👈 default route: "/"
-        element: <Welcome />,
+        index: true,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <Welcome />
+          </Suspense>
+        ),
       },
       {
-        path: "login", // "/login"
-        element: <Login />,
+        path: "login",
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <Login />
+          </Suspense>
+        ),
       },
       {
-        path: "register", // "/register"
-        element: <Register />,
+        path: "register",
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <Register />
+          </Suspense>
+        ),
       },
+
+      /* =========================
+         Protected Routes
+      ========================= */
       {
         element: <ProtectedRoute />,
         children: [
           {
             path: "home",
-            element: <Messages />,
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <Messages />
+              </Suspense>
+            ),
           },
           {
             path: "mail",
-
             children: [
               {
                 path: "provider",
-                element: <Provider />,
+                element: (
+                  <Suspense fallback={<PageLoader />}>
+                    <Provider />
+                  </Suspense>
+                ),
               },
               {
                 path: "sendmail",
-                element: <Landingpage />,
+                element: (
+                  <Suspense fallback={<PageLoader />}>
+                    <Landingpage />
+                  </Suspense>
+                ),
               },
             ],
           },
-
           {
             path: "profile",
-            element: <Profile />,
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <Profile />
+              </Suspense>
+            ),
           },
         ],
       },
+
       {
         path: "*",
-        element: <NotFound />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <NotFound />
+          </Suspense>
+        ),
       },
     ],
   },

@@ -1,8 +1,9 @@
-import { Typography, Box, CircularProgress } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { useGetPreviousMailsQuery } from "../redux/apiSlice";
 import { useMemo, useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import MailCard from "./MailCard";
+import PageLoader from "../routes/PageLoader";
 
 const CARD_HEIGHT = 80;
 
@@ -40,7 +41,7 @@ const Output = () => {
         Sent Mails
       </Typography>
 
-      {isLoading && <CircularProgress />}
+      {isLoading && <PageLoader />}
 
       {!isLoading && sortedMails.length > 0 ? (
         <Box
