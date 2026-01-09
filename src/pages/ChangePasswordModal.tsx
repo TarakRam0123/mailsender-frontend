@@ -15,6 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useChangePasswordMutation } from "../redux/apiSlice";
+import { successToast } from "../utils/toast";
 
 type Props = {
   open: boolean;
@@ -30,6 +31,7 @@ const style = {
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
+  borderRadius: "10px",
 };
 
 // const passwordRegex =
@@ -92,6 +94,7 @@ const ChangePasswordModal: React.FC<Props> = ({ open, handleClose }) => {
       // 👉 Call API here
       const res = await changePassword({ newPassword: password.newPassword });
       if (res?.data?.status) {
+        successToast(res?.data?.message);
         handleModalClose();
       }
     } catch (error) {
@@ -100,7 +103,7 @@ const ChangePasswordModal: React.FC<Props> = ({ open, handleClose }) => {
   };
 
   return (
-    <Modal open={open} onClose={handleModalClose}>
+    <Modal open={open}>
       <Box sx={style}>
         <IconButton
           sx={{ position: "absolute", top: 8, right: 8 }}

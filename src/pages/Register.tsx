@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, TextField, Typography, Paper, Link } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../redux/apiSlice";
+import { errorToast, successToast } from "../utils/toast";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -18,8 +19,10 @@ const Register: React.FC = () => {
       console.log("register success", res);
       if (res.status) {
         navigate("/login");
+        successToast(res.message);
       }
-    } catch (error) {
+    } catch (error: any) {
+      errorToast(error?.data?.message);
       console.log("register failed ", error);
     }
   };

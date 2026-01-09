@@ -15,6 +15,7 @@ import { useTheme } from "@mui/material/styles";
 
 import { useGetUserQuery, useUpdateUserMutation } from "../redux/apiSlice";
 import ChangePasswordModal from "./ChangePasswordModal";
+import { successToast } from "../utils/toast";
 
 const Profile: React.FC = () => {
   const theme = useTheme();
@@ -54,6 +55,7 @@ const Profile: React.FC = () => {
     try {
       const res = await updateUser(profileDetails).unwrap();
       if (res?.status) {
+        successToast(res?.message);
         setIsEditing(false);
         refetch();
       }

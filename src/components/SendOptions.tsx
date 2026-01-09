@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Box, TextField, Button } from "@mui/material";
 import { useSendMailMutation } from "../redux/apiSlice";
+import { successToast } from "../utils/toast";
 type MailcontentProps = {
   files: File[];
 };
@@ -25,7 +26,10 @@ const SendOptions: React.FC<MailcontentProps> = ({ files }) => {
           formData.append("files", file); // KEY MUST MATCH
         });
 
-        await sendMail(formData).unwrap();
+        const res = await sendMail(formData).unwrap();
+        if (res.status) {
+          successToast(res.message);
+        }
       }
       setEmail("");
       console.log("All mails sent");

@@ -16,6 +16,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../redux/apiSlice";
+import { errorToast, successToast } from "../utils/toast";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -47,11 +48,12 @@ const Login: React.FC = () => {
 
     try {
       const res = await login({ email, password }).unwrap();
-
       if (res.status) {
         navigate("/home");
+        successToast(res.message);
       }
-    } catch (error) {
+    } catch (error: any) {
+      errorToast(error?.data?.message);
       console.error("Login failed", error);
     }
   };

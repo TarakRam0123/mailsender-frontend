@@ -5,6 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveAsIcon from "@mui/icons-material/SaveAs";
 import { useGetDraftQuery, useSaveDraftMutation } from "../redux/apiSlice";
 import RichTextEditor from "./RichTextEditor";
+import { successToast } from "../utils/toast";
 type MailcontentProps = {
   files: File[];
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
@@ -34,7 +35,11 @@ const Mailcontent: React.FC<MailcontentProps> = ({ files, setFiles }) => {
       }
 
       // If currently editing → save draft
-      await saveDraft({ subject, body }).unwrap();
+      const res = await saveDraft({ subject, body }).unwrap();
+      if (res?.status) {
+        successToast(res?.message);
+        setEdit(false);
+      }
       setEdit(false);
     } catch (error) {
       console.error("Failed to save draft", error);
