@@ -18,6 +18,7 @@ import { useGetUserQuery, useLogoutMutation } from "../redux/apiSlice";
 import UserSubNavbar from "./UserSubNavbar";
 import { apiSlice } from "../redux/apiSlice";
 import { useDispatch } from "react-redux";
+import { successToast } from "../utils/toast";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -28,9 +29,12 @@ const Navbar: React.FC = () => {
   const isLoggedIn = data?.status === true && !error;
 
   const handleLogout = async () => {
-    await logout().unwrap();
-    dispatch(apiSlice.util.resetApiState());
-    navigate("/");
+    const res = await logout().unwrap();
+    if (res.status) {
+      dispatch(apiSlice.util.resetApiState());
+      navigate("/");
+      successToast(res.message);
+    }
   };
 
   return (

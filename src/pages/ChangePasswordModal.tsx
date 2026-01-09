@@ -15,7 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useChangePasswordMutation } from "../redux/apiSlice";
-import { successToast } from "../utils/toast";
+import { errorToast, successToast } from "../utils/toast";
 
 type Props = {
   open: boolean;
@@ -92,12 +92,15 @@ const ChangePasswordModal: React.FC<Props> = ({ open, handleClose }) => {
       if (!validate()) return;
 
       // 👉 Call API here
-      const res = await changePassword({ newPassword: password.newPassword });
-      if (res?.data?.status) {
-        successToast(res?.data?.message);
+      const res = await changePassword({
+        newPassword: password.newPassword,
+      }).unwrap();
+      if (res?.status) {
+        successToast(res?.message);
         handleModalClose();
       }
-    } catch (error) {
+    } catch (error: any) {
+      errorToast(error?.data?.message || "Password change failed");
       console.log(error);
     }
   };
